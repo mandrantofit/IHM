@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Logout, MoreVert } from '@mui/icons-material';
+import ModalForm from './components/ModalForm'; // Importer le ModalForm
 
 const columns = (handleMenuOpen) => [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -56,6 +57,7 @@ function App() {
   const [equipment, setEquipment] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentId, setCurrentId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false); // État pour gérer l'ouverture du modal
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
@@ -86,6 +88,16 @@ function App() {
     setCurrentId(null);
   };
 
+  // Fonction pour ouvrir le modal
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  // Fonction pour fermer le modal
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div className="min-vh-100 bg-light">
       <AppBar position="static" sx={{ background: 'white', color: 'black' }}>
@@ -109,7 +121,9 @@ function App() {
               <TextField variant="outlined" label="Search equipment..." fullWidth />
             </Grid>
             <Grid item xs={12} md={4}>
-              <Button variant="contained" fullWidth>Add New Equipment</Button>
+              <Button variant="contained" fullWidth onClick={handleModalOpen}> {/* Ouvre le modal */}
+                Add New Equipment
+              </Button>
             </Grid>
           </Grid>
           <div style={{ height: 400, width: '100%', marginTop: 20 }}>
@@ -132,6 +146,7 @@ function App() {
           <MenuItem >Delete</MenuItem>
         </Menu>
       </Container>
+      <ModalForm open={modalOpen} handleClose={handleModalClose} /> {/* Appelle le modal */}
     </div>
   );
 }
